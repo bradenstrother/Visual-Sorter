@@ -3,6 +3,8 @@ import { getMergeSortAnimations }  from '../sortingAlgorithms/mergeSort.js';
 import { getQuickSortAnimations } from '../sortingAlgorithms/quickSort.js';
 import './VisualSorter.css';
 
+let sortActive = false;
+
 export default class VisualSorter extends React.Component {
     constructor(props) {
     super(props);
@@ -17,16 +19,19 @@ componentDidMount() {
 }
 
 resetArray() {
-    const array = [];
-    for (let i = 0; i < 300; i++) {
-        array.push(randomIntFromInterval(5, 730));
+    if (sortActive === false) {
+        const array = [];
+        for (let i = 0; i < 300; i++) {
+            array.push(randomIntFromInterval(5, 730));
+        }
+        this.setState({
+            array
+        });
     }
-    this.setState({
-        array
-    });
 }
 
 mergeSort() {
+    sortActive = true;
     const animations = getMergeSortAnimations(this.state.array);
     for (let i = 0; i < animations.length; i++) {
         const arrayBars = document.getElementsByClassName('array-bar');
@@ -48,10 +53,14 @@ mergeSort() {
             }, i * 3);
         }
     }
+    sortActive = false;
 }
 
 quickSort() {
-
+    const animations = getQuickSortAnimations(this.state.array);
+    for (let i = 0; i < animations.length; i++) {
+        const arrayBars = document.getElementsByClassName('array-bar');
+    }
 }
 
 heapSort() {
@@ -63,16 +72,16 @@ bubbleSort() {
 }
 
 testSortingAlgorithms() {
-    for (let i = 0; i < 100; i++) {
-        const array = [];
-        const length = randomIntFromInterval(1, 1000);
-        for (let i = 0; i < length; i++) {
-            array.push(randomIntFromInterval(-1000, 1000));
-        }
-        const javaScriptSortedArray = array.slice().sort((a, b) => a - b);
-        const mergeSortedArray = getMergeSortAnimations(array.slice());
-        console.log(arraysAreEqual(javaScriptSortedArray, mergeSortedArray));
-    }
+    // for (let i = 0; i < 100; i++) {
+    //     const array = [];
+    //     const length = randomIntFromInterval(1, 1000);
+    //     for (let i = 0; i < length; i++) {
+    //         array.push(randomIntFromInterval(-1000, 1000));
+    //     }
+    //     const javaScriptSortedArray = array.slice().sort((a, b) => a - b);
+    //     const mergeSortedArray = getMergeSortAnimations(array.slice());
+    //     console.log(arraysAreEqual(javaScriptSortedArray, mergeSortedArray));
+    // }
 }
 
 render() {
@@ -94,7 +103,7 @@ render() {
             <button onClick={() => this.quickSort()}>Quick Sort</button>
             <button onClick={() => this.heapSort()}>Heap Sort</button>
             <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
-            <button onClick={() => this.testSortingAlgorithms()}>Test Sorting Algorithms</button>
+            {/* <button onClick={() => this.testSortingAlgorithms()}>Test Sorting Algorithms</button> */}
         </div>
         )
     }
